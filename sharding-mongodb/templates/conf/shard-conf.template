@@ -1,0 +1,47 @@
+processManagement:
+    # 以后台进程的方式启动
+    fork: true  # fork and run in background
+    pidFilePath: DATA_DIR/pid/SHARD_NAME-PORT.pid
+    timeZoneInfo: /usr/share/zoneinfo
+systemLog:
+    destination: file
+    logAppend: true
+    logRotate: rename
+    path: LOG_DIR/SHARD_NAME-PORT.log
+    # 打印异常详细信息
+    traceAllExceptions: true
+storage:
+    dbPath: DATA_DIR/SHARD_NAME/PORT
+    journal:
+        enabled: true
+    # 如果为true，则MongoDB使用单独的目录存储每个数据库的数据, 目录位于storage.dbPath目录下，
+    # 每个子目录名称都与数据库名称相对应
+    directoryPerDB: true
+    wiredTiger:
+        engineConfig:
+            # 为时true，mongod将索引和集合存储在data（storage.dbPath）目录下的单独子目录中
+            directoryForIndexes: true
+net:
+    # 分片服务的默认端口号为 PORT
+    port: PORT
+    bindIp: 0.0.0.0
+    maxIncomingConnections: 2000
+    # 如果为true，则mongod或mongos实例会在收到客户端后验证来自客户端的所有请求，
+    # 以防止客户端将格式错误或无效的BSON插入MongoDB数据库
+    wireObjectCheck: true
+    unixDomainSocket:
+        enabled: true
+        pathPrefix: DATA_DIR/socket/SHARD_NAME/PORT
+        filePermissions: 0700
+security:
+  clusterAuthMode: keyFile
+  #设置文件的权限为400，不然服务无法启动 chmod 400 DATA_DIR/auth/keyfile.key
+  keyFile: DATA_DIR/auth/keyfile.key
+  authorization: enabled
+
+replication:
+    # 副本集的名称
+    replSetName: SHARD_NAME
+sharding:
+    # 在集群中的角色为分片
+    clusterRole: shardsvr

@@ -1,0 +1,24 @@
+# @author Luchaoxin
+# @version V 1.0
+version: '3.8'
+
+services:
+  postgresql:
+    image: postgres:12.5
+    container_name: postgresql
+    restart: always
+    environment:
+      - POSTGRES_USER=
+      - POSTGRES_DB=
+      - EXPOSE_PORT=5432
+      - POSTGRES_PASSWORD=
+    volumes:
+      - /mnt/vdb/data/postgresql:/var/lib/postgresql/data
+    ports:
+      - 5452:5432
+    networks:
+      - pistonint-framework-net
+
+networks:
+  pistonint-framework-net:
+    external: true

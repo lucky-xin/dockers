@@ -1,0 +1,30 @@
+groups:
+  - name: node_down
+    rules:
+      - alert: InstanceDown
+        expr: up == 0
+        for: 1m
+        labels:
+          user: test
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 1 minutes."
+  - name: test
+    rules:
+      - alert: 内存使用率过高
+        expr: 100-(node_memory_Buffers_bytes+node_memory_Cached_bytes+node_memory_MemFree_bytes)/node_memory_MemTotal_bytes*100 > 30
+        for: 1m  # 告警持续时间，超过这个时间才会发送给alertmanager
+        labels:
+          severity: warning
+        annotations:
+          summary: "Instance {{ $labels.instance }} 内存使用率过高"
+          description: "{{ $labels.instance }} of job {{$labels.job}}内存使用率超过80%,当前使用率[{{ $value }}]."
+
+      - alert: cpu使用率过高
+        expr: 100-avg(irate(node_cpu_seconds_total{mode="idle"}[5m])) by(instance)*100 > 0
+        for: 1m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Instance {{ $labels.instance }} cpu使用率过高"
+          description: "{{ $labels.instance }} of job {{$labels.job}}cpu使用率超过80%,当前使用率[{{ $value }}]."

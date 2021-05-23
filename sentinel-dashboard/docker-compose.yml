@@ -1,0 +1,26 @@
+# @author Luchaoxin
+# @version V 1.0
+version: '3.8'
+services:
+
+  sentinel-dashboard:
+    image: 120.79.140.119:9080/spring-projects/sentinel-dashboard:1.8.0
+    build:
+      context: ""
+      dockerfile: Dockerfile
+      args:
+        JAR_FILE: sentinel-dashboard-1.8.0.jar
+    container_name: sentinel-dashboard
+    restart: always
+    environment:
+      - SERVER_IP=172.18.169.103
+      - SERVER_PORT=8888
+    volumes:
+      - /mnt/vdb/log/sentinel:/root/logs/csp
+    ports:
+      - 8888:8888
+    networks:
+      - pistonint-framework-net
+networks:
+  pistonint-framework-net:
+    external: true

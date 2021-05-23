@@ -1,0 +1,48 @@
+modules:
+  http_post_2trim_query: ##用于post请求使用的模块）由于每个接口传参不同 可以定义多个module 用于不同接口（例如此命名为http_post_2xx_query 用于监测query.action接口
+    prober: http
+    timeout: 15s
+    http:
+      preferred_ip_protocol: "ip4" ##使用ipv4
+      method: POST
+      valid_status_codes: [200]
+      headers:
+        Content-Type: 'application/json;charset=UTF-8'
+      body: '{"id":"abc","cnName":"111","enName":"222"}'
+      fail_if_body_matches_regexp:
+        - 'Could not connect .*'
+      fail_if_body_not_matches_regexp:
+        # 匹配 code=0
+        - '^\{[\s\S]+\"\bcode\b\"\s*:\s*0\s*,'
+#      fail_if_header_matches: # Verifies that no cookies are set
+#        - header: Set-Cookie
+#          allow_missing: true
+#          regexp: '.*'
+  tcp_connect:
+    prober: tcp
+  pop3s_banner:
+    prober: tcp
+    tcp:
+      query_response:
+        - expect: "^+OK"
+      tls: true
+      tls_config:
+        insecure_skip_verify: false
+  ssh_banner:
+    prober: tcp
+    tcp:
+      query_response:
+        - expect: "^SSH-2.0-"
+  irc_banner:
+    prober: tcp
+    tcp:
+      query_response:
+        - send: "NICK prober"
+        - send: "USER prober prober prober :prober"
+        - expect: "PING :([^ ]+)"
+          send: "PONG ${1}"
+        - expect: "^:[^ ]+ 001"
+  icmp:
+    prober: icmp
+    timeout: 5s
+    icmp:

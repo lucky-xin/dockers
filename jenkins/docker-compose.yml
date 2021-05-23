@@ -1,0 +1,35 @@
+# @author Luchaoxin
+# @version V 1.0
+# 功能：jenkins-BlueOcean
+# 说明：建议用户名使用root(必须为Docker用户组)，挂载的.m2路径也需要相同用户名
+
+version: '3.8'
+services:
+  jenkins:
+    restart: always
+    image: jenkinsci/blueocean
+    container_name: jenkins
+    user: root
+    ports:
+      - 8081:8080
+    volumes:
+      - /mnt/vdb/data/jenkins-data:/var/jenkins_home
+      - ./config:/usr/config
+      - /mnt/vdb/data/maven-repository:/root/.m2
+      - /var/run/docker.sock:/var/run/docker.sock
+    privileged: true
+    environment:
+      TZ: Asia/Shanghai
+      JASYPT_PASSWORD: pi#st!&on@int#JAS5YPT.%!2020*.S!&
+      JAVA_OPTS: -Xms256M -Xmx1024M
+
+    networks:
+      - pistonint-framework-net
+
+networks:
+  pistonint-framework-net:
+    external: true
+
+volumes:
+  # docker volume create maven-repository
+  maven-repository:

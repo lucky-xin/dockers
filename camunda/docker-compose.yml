@@ -1,0 +1,29 @@
+services:
+  camunda:
+#    image: camunda/camunda-bpm-platform
+    image: 120.79.140.119:9080/library/camunda
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    container_name: camunda
+    ports:
+      - 11004:8080
+    volumes:
+      #      - ./conf/server.xml:/camunda/conf/server.xml
+      - ./conf/web.xml:/camunda/webapps/camunda/WEB-INF/web.xml
+      - ./conf/engine-rest/web.xml:/camunda/webapps/engine-rest/WEB-INF/web.xml
+      - ./webapps:/camunda/webapps
+      - ./logs:/camunda/logs
+    restart: always
+    environment:
+      DB_DRIVER: org.postgresql.Driver
+      DB_URL: jdbc:postgresql://172.18.169.103:5452/camunda_engine
+      DB_USERNAME: pistonint_postgres
+      DB_PASSWORD: piston#@!.*postgres
+      TZ: Asia/ShangHai
+    networks:
+      - pistonint-framework-net
+
+networks:
+  pistonint-framework-net:
+    external: true
