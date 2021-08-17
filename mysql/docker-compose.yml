@@ -1,0 +1,25 @@
+# @author Luchaoxin
+# @version V 1.0
+version: '3.8'
+services:
+
+  mysql:
+    image: 127.0.0.1:9080/infrastructure/mysql:8.0.25
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      
+    environment:
+      MYSQL_ROOT_PASSWORD: root123456
+    command: --federated
+    restart: unless-stopped
+    container_name: mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    networks:
+      - pistonint-framework-net
+networks:
+  pistonint-framework-net:
+    external: true
