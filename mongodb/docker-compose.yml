@@ -1,0 +1,21 @@
+# @author Luchaoxin
+# @version V 1.0
+version: '3.8'
+services:
+
+  mongo:
+    image: mongo
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./data:/data/db
+      - ./log:/data/log
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
+    networks:
+      - mongo-net
+networks:
+  mongo-net:
+    external: true
