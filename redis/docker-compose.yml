@@ -9,7 +9,7 @@ services:
   redis:
     build:
       context: ./
-      dockerfile: ./Dockerfile
+      dockerfile: ./DockerfileWithFilter
     image: redis
     container_name: redis
     restart: always
@@ -18,7 +18,7 @@ services:
       - ./config/redis.conf:/usr/local/etc/redis/redis.conf
       - ./data/:/data
     ports:
-      - 6379:6379
+      - "6379:6379"
     networks:
       - pistonint-framework-net
 

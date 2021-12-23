@@ -1,0 +1,9 @@
+FROM redis:latest
+ENV LIBDIR /usr/lib/redis/modules
+#WORKDIR /data
+RUN set -ex;\
+    mkdir -p "$LIBDIR";
+COPY ./so/libredis-cuckoofilter.so "$LIBDIR"
+#COPY so/rebloom.so "$LIBDIR"
+
+CMD ["redis-server", "/usr/local/etc/redis/redis.conf", "--loadmodule", "/usr/lib/redis/modules/libredis-cuckoofilter.so"]
