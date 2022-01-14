@@ -20,7 +20,6 @@ services:
     privileged: true
     environment:
       TZ: Asia/Shanghai
-      JASYPT_PASSWORD: pi#st!&on@int#JAS5YPT.%!2020*.S!&
       JAVA_OPTS: -Xms256M -Xmx1024M
 
     networks:
